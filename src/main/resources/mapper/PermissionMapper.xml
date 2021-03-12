@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blz.springsecuritydemo.mapper.PermissionMapper">
+
+    <resultMap id="basePermissionResultMap" type="com.blz.springsecuritydemo.entity.Permission">
+        <id property="id" column="id"/>
+        <result property="code" column="permission_code"/>
+        <result property="description" column="permission_description"/>
+        <result property="url" column="permission_url"/>
+    </resultMap>
+
+    <resultMap id="simplePermissionResultMap" type="com.blz.springsecuritydemo.entity.Permission">
+        <result property="code" column="permission_code"/>
+        <result property="url" column="permission_url"/>
+    </resultMap>
+
+    <select id="queryAllPermissionUrl" resultMap="simplePermissionResultMap">
+        select permission_code, permission_url from blog_permission
+    </select>
+
+    <select id="queryPermissionsByRoleId" resultMap="simplePermissionResultMap">
+        select permission_code, permission_url from blog_permission where role_id = #{roleId}
+    </select>
+
+    <select id="queryPermissionsByUserId" resultMap="simplePermissionResultMap">
+        select bp.permission_code
+        from blog_permission bp
+        where bp.id in (
+            select brpr.permission_id
+            from blog_role_permission_relation brpr
+            where brpr.role_id in (
+                select burr.role_id from blog_user_role_relation burr where burr.user_id = #{userId}
+            )
+        );
+    </select>
+
+    <select id="queryByPermissionCode" resultMap="basePermissionResultMap">
+        select * from blog_permission where role_code = #{code}
+    </select>
+
+    <select id="queryPermissionsByUrl" resultMap="basePermissionResultMap">
+        select permission_code,permission_url from blog_permission where permission_url = #{url}
+    </select>
+
+
+</mapper>

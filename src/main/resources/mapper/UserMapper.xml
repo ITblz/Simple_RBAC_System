@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blz.springsecuritydemo.mapper.UserMapper">
+
+    <resultMap id="baseUserResultMap" type="com.blz.springsecuritydemo.entity.User">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="username"  column="user_name" jdbcType="VARCHAR"/>
+        <result property="password"  column="user_password" jdbcType="VARCHAR"/>
+        <result property="mobile" column="user_mobile" jdbcType="VARCHAR"/>
+        <result property="create_time"  column="user_create_time" />
+    </resultMap>
+
+    <select id="queryByUserName" parameterType="java.lang.String" resultMap="baseUserResultMap">
+        select * from blog_user where user_name = #{username}
+    </select>
+
+    <select id="queryByUserId" parameterType="int" resultMap="baseUserResultMap">
+        select * from blog_user where id = #{id}
+    </select>
+
+</mapper>

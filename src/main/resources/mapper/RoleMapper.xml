@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blz.springsecuritydemo.mapper.RoleMapper">
+    <resultMap id="baseRoleResultMap" type="com.blz.springsecuritydemo.entity.Role">
+        <id property="id" column="id"/>
+        <result property="code" column="role_code"/>
+        <result property="description" column="role_description"/>
+        <result property="create_time" column="role_create_time"/>
+        <result property="update_time" column="role_update_time" />
+    </resultMap>
+
+    <select id="queryByRoleCode" resultMap="baseRoleResultMap">
+        select * from blog_role where role_code = #{code}
+    </select>
+
+    <select id="queryByRoleId" resultMap="baseRoleResultMap">
+        select * from blog_role where id = #{id}
+    </select>
+
+    <select id="queryRoleByUserId" resultMap="baseRoleResultMap">
+        select * from blog_role where id in(select role_id from blog_user_role_relation where user_id = #{userId});
+    </select>
+
+</mapper>
